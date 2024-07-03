@@ -29,7 +29,7 @@ export function getWebGLContext(canvas: HTMLCanvasElement) {
 export function initWebGLResources(gl: WebGL2RenderingContext): WebGLEssentials {
     const rawShader = new Shader({ vertexSource, fragmentSource });
 
-    const shader = rawShader.compile({ gl });
+    const shader = rawShader.compile(gl);
 
     return {
         gl,

@@ -14,9 +14,7 @@ export default class Shader {
         this.fragmentSource = fragmentSource;
     }
 
-    public compile(params: { gl: WebGL2RenderingContext }) {
-        const { gl } = params;
-
+    public compile(gl: WebGL2RenderingContext) {
         const vertexShader = Shader.createShader({ gl, shaderSource: this.vertexSource, shaderType: gl.VERTEX_SHADER });
         const fragmentShader = Shader.createShader({ gl, shaderSource: this.fragmentSource, shaderType: gl.FRAGMENT_SHADER });
 
