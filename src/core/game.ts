@@ -5,15 +5,17 @@ export default class Game {
     private webGLEssentials?: WebGLEssentials;
 
     public init() {
+        this.initCanvas();
+        this.initWebGLEssentials();
+    }
+
+    private initCanvas() {
         this.canvas = document.getElementById('canvas') as HTMLCanvasElement;
         this.canvas.width = 1280;
         this.canvas.height = 720;
-
-        this.initWebGL();
     }
 
-
-    private initWebGL() {
+    private initWebGLEssentials() {
         if (!this.canvas) {
             throw new Error('Canvas not found');
         }

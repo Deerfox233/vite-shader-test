@@ -7,15 +7,15 @@ export default class Shader {
     private vertexSource: string;
     private fragmentSource: string;
 
-    constructor(config: { vertexSource: string, fragmentSource: string }) {
-        const { vertexSource, fragmentSource } = config;
+    constructor(params: { vertexSource: string, fragmentSource: string }) {
+        const { vertexSource, fragmentSource } = params;
 
         this.vertexSource = vertexSource;
         this.fragmentSource = fragmentSource;
     }
 
-    public compile(config: { gl: WebGL2RenderingContext }) {
-        const { gl } = config;
+    public compile(params: { gl: WebGL2RenderingContext }) {
+        const { gl } = params;
 
         const vertexShader = Shader.createShader({ gl, shaderSource: this.vertexSource, shaderType: gl.VERTEX_SHADER });
         const fragmentShader = Shader.createShader({ gl, shaderSource: this.fragmentSource, shaderType: gl.FRAGMENT_SHADER });
@@ -23,8 +23,8 @@ export default class Shader {
         return Shader.compileShader({ gl, vertexShader, fragmentShader });
     }
 
-    private static createShader(config: { gl: WebGL2RenderingContext, shaderSource: string, shaderType: number }) {
-        const { gl, shaderSource, shaderType } = config;
+    private static createShader(params: { gl: WebGL2RenderingContext, shaderSource: string, shaderType: number }) {
+        const { gl, shaderSource, shaderType } = params;
 
         const shader = gl.createShader(shaderType);
         if (!shader) {
@@ -37,8 +37,8 @@ export default class Shader {
         return shader;
     }
 
-    private static compileShader(config: { gl: WebGL2RenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader }): ShaderData {
-        const { gl, vertexShader, fragmentShader } = config;
+    private static compileShader(params: { gl: WebGL2RenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader }): ShaderData {
+        const { gl, vertexShader, fragmentShader } = params;
 
         const program = gl.createProgram();
         if (!program) {
