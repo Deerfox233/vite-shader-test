@@ -8,12 +8,16 @@ export interface Attribute {
 }
 
 export default class VAO {
-    private buffer: WebGLBuffer;
+    private _buffer: WebGLBuffer;
     private attribute: Attribute;
+
+    get buffer() {
+        return this._buffer;
+    }
 
 
     constructor(params: { buffer: WebGLBuffer, attribute: Attribute }) {
-        this.buffer = params.buffer;
+        this._buffer = params.buffer;
         this.attribute = params.attribute;
     }
 
@@ -29,7 +33,7 @@ export default class VAO {
         const { gl, buffer, attribute } = params;
 
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.vertexAttribPointer(attribute.index, attribute.size, attribute.type, attribute.normalized, attribute.stride, attribute.offset);
-        gl.enableVertexAttribArray(attribute.index);
+        gl.vertexAttribPointer(0, attribute.size, attribute.type, attribute.normalized, attribute.stride, attribute.offset);
+        gl.enableVertexAttribArray(0);
     }
 }

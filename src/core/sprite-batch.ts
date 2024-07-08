@@ -4,6 +4,7 @@ const VERTEX_SIZE = 3;
 const SPRITE_SIZE = 4;
 
 export class SpriteBatch {
+    gl: WebGL2RenderingContext;
     count: number = 0;
     capacity: number = 0;
     vertices: Float32Array;
@@ -12,6 +13,7 @@ export class SpriteBatch {
     constructor(params: { gl: WebGL2RenderingContext, capacity: number }) {
         const { gl, capacity } = params;
 
+        this.gl = gl;
         this.capacity = capacity;
         this.vertices = new Float32Array(capacity * VERTEX_SIZE * SPRITE_SIZE);
 
@@ -21,20 +23,18 @@ export class SpriteBatch {
         }
 
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.DYNAMIC_DRAW);
 
-        this.vao = new VAO({ buffer, attribute: { index: vertexPosition, size: 3, type: gl.FLOAT, normalized: false, stride: 0, offset: 0 } });
-
+        this.vao = new VAO({ buffer, attribute: { index: 0, size: 3, type: gl.FLOAT, normalized: false, stride: 0, offset: 0 } });
     }
 
-    public begin(gl: WebGL2RenderingContext) {
-        this.vao.bind(gl);
+    public begin() {
+        this.vao.bind(this.gl);
     }
 
     public drawRect(rectVertices: Float32Array) {
         if (this.count >= this.capacity) {
-            // throw new Error('SpriteBatch capacity reached');
-            this.flush();
+            throw new Error('SpriteBatch capacity reached'); // TODO
         }
 
         const offset = this.count * VERTEX_SIZE * SPRITE_SIZE;
@@ -43,10 +43,14 @@ export class SpriteBatch {
     }
 
     public end(): void {
-
+        this.flush();
     }
 
-    public flush() {
+    private flush() {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vao.buffer);
+        this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, this.vertices);
 
+        this.vao.draw(this.gl);
+        this.count = 0;
     }
 }

@@ -1,6 +1,7 @@
 export interface ShaderData {
     program: WebGLProgram;
-    uniformLocations: { [key: string]: WebGLUniformLocation };
+    uniformLocations: Record<string, WebGLUniformLocation>;
+    attributeLocations: Record<string, number>;
 }
 
 export default class Shader {
@@ -51,7 +52,7 @@ export default class Shader {
             throw new Error('Failed to link program');
         }
 
-        const uniformLocations: { [key: string]: WebGLUniformLocation } = {};
+        const uniformLocations: Record<string, WebGLUniformLocation> = {};
         for (let i = 0; i < gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS); i++) {
             const info = gl.getActiveUniform(program, i);
             if (!info) {
@@ -68,6 +69,17 @@ export default class Shader {
             uniformLocations[info.name] = location;
         }
 
-        return { program, uniformLocations };
+        const attributeLocations: Record<string, number> = {};
+        for (let i = 0; i < gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES); i++) {
+            const info = gl.getActiveAttrib(program, i);
+            if (!info) {
+                console.warn('Failed to get attribute info');
+                continue;
+            }
+
+            attributeLocations[info.name] = gl.getAttribLocation(program, info.name);
+        }
+
+        return { program, uniformLocations, attributeLocations };
     }
 }

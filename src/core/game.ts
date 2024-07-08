@@ -1,6 +1,7 @@
 import { mat4 } from "gl-matrix";
 import VAO from "./vao";
 import { WebGLEssentials, getWebGLContext, initWebGLResources } from "./webgl";
+import { SpriteBatch } from "./sprite-batch";
 
 export default class Game {
     private canvas?: HTMLCanvasElement;
@@ -19,13 +20,13 @@ export default class Game {
         }
         const { gl, shader } = this.webGLEssentials;
 
-        const vertices = new Float32Array([
-            // Rectangle 1
+        const rect1 = new Float32Array([
             -0.5, 0.5, 0.0,
             0.5, 0.5, 0.0,
             0.5, -0.5, 0.0,
             -0.5, -0.5, 0.0,
-            // Rectangle 2
+        ]);
+        const rect2 = new Float32Array([
             0.0, 1.0, 0.0,
             1.0, 1.0, 0.0,
             1.0, 0.0, 0.0,
@@ -37,26 +38,15 @@ export default class Game {
             throw new Error('Failed to create buffer');
         }
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
         gl.useProgram(shader.program);
-        const vertexPosition = gl.getAttribLocation(shader.program, 'aVertexPosition');
-
-        const vao = new VAO({ buffer, attribute: { index: vertexPosition, size: 3, type: gl.FLOAT, normalized: false, stride: 0, offset: 0 } });
-        
         gl.uniform4fv(shader.uniformLocations.uPixelColor, [1.0, 0.0, 0.0, 1.0]);
         gl.uniformMatrix4fv(shader.uniformLocations.uTransform, false, mat4.create());
 
-        vao.bind(gl);
-        vao.draw(gl);
+        const spriteBatch = new SpriteBatch({ gl: gl, capacity: 2 });
 
-        const vao2 = new VAO({ buffer, attribute: { index: vertexPosition, size: 3, type: gl.FLOAT, normalized: false, stride: 0, offset: 0 } });
-        gl.uniform4fv(shader.uniformLocations.uPixelColor, [0.0, 1.0, 0.0, 1.0]);
-
-        gl.uniformMatrix4fv(shader.uniformLocations.uTransform, false, mat4.create());
-
-        vao2.bind(gl);
-        vao2.draw(gl);
+        spriteBatch.begin();
+        spriteBatch.drawRect(rect1);
+        spriteBatch.end();
     }
 
     private initCanvas() {
