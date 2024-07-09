@@ -1,5 +1,4 @@
 import { mat4 } from "gl-matrix";
-import VAO from "./vao";
 import { WebGLEssentials, getWebGLContext, initWebGLResources } from "./webgl";
 import { SpriteBatch } from "./sprite-batch";
 
@@ -33,19 +32,15 @@ export default class Game {
             0.0, 0.0, 0.0
         ]);
 
-        const buffer = gl.createBuffer();
-        if (!buffer) {
-            throw new Error('Failed to create buffer');
-        }
-
         gl.useProgram(shader.program);
-        gl.uniform4fv(shader.uniformLocations.uPixelColor, [1.0, 0.0, 0.0, 1.0]);
-        gl.uniformMatrix4fv(shader.uniformLocations.uTransform, false, mat4.create());
+        gl.uniform4fv(shader.uniformLocations["uPixelColor"], [1.0, 0.0, 0.0, 1.0]);
+        gl.uniformMatrix4fv(shader.uniformLocations["uTransform"], false, mat4.create());
 
-        const spriteBatch = new SpriteBatch({ gl: gl, capacity: 2 });
+        const spriteBatch = new SpriteBatch({ gl, capacity: 1 });
 
         spriteBatch.begin();
         spriteBatch.drawRect(rect1);
+        // spriteBatch.drawRect(rect2);
         spriteBatch.end();
     }
 

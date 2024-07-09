@@ -4,11 +4,11 @@ const VERTEX_SIZE = 3;
 const SPRITE_SIZE = 4;
 
 export class SpriteBatch {
-    gl: WebGL2RenderingContext;
-    count: number = 0;
-    capacity: number = 0;
-    vertices: Float32Array;
-    vao: VAO;
+    private gl: WebGL2RenderingContext;
+    private count: number = 0;
+    private capacity: number = 0;
+    private vertices: Float32Array;
+    private vao: VAO;
 
     constructor(params: { gl: WebGL2RenderingContext, capacity: number }) {
         const { gl, capacity } = params;
@@ -25,7 +25,7 @@ export class SpriteBatch {
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
         gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.DYNAMIC_DRAW);
 
-        this.vao = new VAO({ buffer, attribute: { index: 0, size: 3, type: gl.FLOAT, normalized: false, stride: 0, offset: 0 } });
+        this.vao = new VAO(buffer, { index: 0, size: 3, type: gl.FLOAT, normalized: false, stride: 0, offset: 0 });
     }
 
     public begin() {
@@ -42,13 +42,13 @@ export class SpriteBatch {
         this.count++;
     }
 
-    public end(): void {
+    public end() {
         this.flush();
     }
 
     private flush() {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vao.buffer);
-        this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, this.vertices);
+        this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, this.vertices.subarray(0, this.count * VERTEX_SIZE * SPRITE_SIZE));
 
         this.vao.draw(this.gl);
         this.count = 0;
