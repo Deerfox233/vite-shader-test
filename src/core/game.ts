@@ -26,21 +26,21 @@ export default class Game {
             -0.5, -0.5, 0.0,
         ]);
         const rect2 = new Float32Array([
-            0.0, 1.0, 0.0,
+            0.5, 1.0, 0.0,
             1.0, 1.0, 0.0,
-            1.0, 0.0, 0.0,
-            0.0, 0.0, 0.0
+            1.0, 0.5, 0.0,
+            0.5, 0.5, 0.0
         ]);
 
         gl.useProgram(shader.program);
         gl.uniform4fv(shader.uniformLocations["uPixelColor"], [1.0, 0.0, 0.0, 1.0]);
         gl.uniformMatrix4fv(shader.uniformLocations["uTransform"], false, mat4.create());
 
-        const spriteBatch = new SpriteBatch({ gl, capacity: 1 });
+        const spriteBatch = new SpriteBatch({ gl, capacity: 2 });
 
         spriteBatch.begin();
         spriteBatch.drawRect(rect1);
-        // spriteBatch.drawRect(rect2);
+        spriteBatch.drawRect(rect2);
         spriteBatch.end();
     }
 

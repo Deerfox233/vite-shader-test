@@ -1,3 +1,5 @@
+import { Context } from "./webgl";
+
 export interface ShaderData {
     program: WebGLProgram;
     uniformLocations: Record<string, WebGLUniformLocation>;
@@ -15,14 +17,14 @@ export default class Shader {
         this.fragmentSource = fragmentSource;
     }
 
-    public compile(gl: WebGL2RenderingContext) {
+    public compile(gl: Context) {
         const vertexShader = Shader.createShader({ gl, shaderSource: this.vertexSource, shaderType: gl.VERTEX_SHADER });
         const fragmentShader = Shader.createShader({ gl, shaderSource: this.fragmentSource, shaderType: gl.FRAGMENT_SHADER });
 
         return Shader.compileShader({ gl, vertexShader, fragmentShader });
     }
 
-    private static createShader(params: { gl: WebGL2RenderingContext, shaderSource: string, shaderType: number }) {
+    private static createShader(params: { gl: Context, shaderSource: string, shaderType: number }) {
         const { gl, shaderSource, shaderType } = params;
 
         const shader = gl.createShader(shaderType);
@@ -36,7 +38,7 @@ export default class Shader {
         return shader;
     }
 
-    private static compileShader(params: { gl: WebGL2RenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader }): ShaderData {
+    private static compileShader(params: { gl: Context, vertexShader: WebGLShader, fragmentShader: WebGLShader }): ShaderData {
         const { gl, vertexShader, fragmentShader } = params;
 
         const program = gl.createProgram();

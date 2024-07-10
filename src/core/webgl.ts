@@ -2,12 +2,14 @@ import Shader, { ShaderData } from "./shader";
 import vertexSource from "./shaders/vs.glsl";
 import fragmentSource from "./shaders/fs.glsl";
 
+export type Context = WebGL2RenderingContext | WebGLRenderingContext;
+
 export interface WebGLEssentials {
-    gl: WebGL2RenderingContext;
+    gl: Context;
     shader: ShaderData;
 }
 
-export function getWebGLContext(canvas: HTMLCanvasElement) {
+export function getWebGLContext(canvas: HTMLCanvasElement): Context {
     const option: WebGLContextAttributes = {
         alpha: false,
         antialias: true,
@@ -18,15 +20,15 @@ export function getWebGLContext(canvas: HTMLCanvasElement) {
         failIfMajorPerformanceCaveat: true
     }
 
-    const gl = canvas.getContext('webgl2', option);
+    const gl = canvas.getContext('webgl2', option) || canvas.getContext('webgl', option);
     if (!gl) {
-        throw new Error('WebGL2 not supported');
+        throw new Error('WebGL not supported');
     }
 
     return gl;
 }
 
-export function initWebGLResources(gl: WebGL2RenderingContext): WebGLEssentials {
+export function initWebGLResources(gl: Context): WebGLEssentials {
     const rawShader = new Shader({ vertexSource, fragmentSource });
 
     const shader = rawShader.compile(gl);
