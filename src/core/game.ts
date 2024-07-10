@@ -1,4 +1,4 @@
-import { mat4 } from "gl-matrix";
+import { mat3 } from "gl-matrix";
 import { WebGLEssentials, getWebGLContext, initWebGLResources } from "./webgl";
 import { SpriteBatch } from "./sprite-batch";
 
@@ -26,20 +26,20 @@ export default class Game {
             -0.5, -0.5, 0.0,
         ]);
         const rect2 = new Float32Array([
-            0.5, 1.0, 0.0,
+            0.6, 1.0, 0.0,
             1.0, 1.0, 0.0,
             1.0, 0.5, 0.0,
-            0.5, 0.5, 0.0
+            0.6, 0.5, 0.0
         ]);
 
         gl.useProgram(shader.program);
         gl.uniform4fv(shader.uniformLocations["uPixelColor"], [1.0, 0.0, 0.0, 1.0]);
-        gl.uniformMatrix4fv(shader.uniformLocations["uTransform"], false, mat4.create());
 
         const spriteBatch = new SpriteBatch({ gl, capacity: 2 });
 
         spriteBatch.begin();
-        spriteBatch.drawRect(rect1);
+
+        spriteBatch.drawRect(rect1, mat3.translate(mat3.create(), mat3.create(), [-0.5, 0.0]));
         spriteBatch.drawRect(rect2);
         spriteBatch.end();
     }

@@ -1,3 +1,4 @@
+import { mat3, vec3 } from "gl-matrix";
 import VAO from "./vao";
 import { Context } from "./webgl";
 
@@ -51,13 +52,28 @@ export class SpriteBatch {
         this.vao.bind(this.gl);
     }
 
-    public drawRect(rectVertices: Float32Array) {
+    public drawRect(rectVertices: Float32Array, transform: mat3 = mat3.create()) {
         if (this.count >= this.capacity) {
             throw new Error('SpriteBatch capacity reached'); // TODO
         }
+        
+        console.log('transform', transform);
+
+        const [v1, v2, v3, v4] = [vec3.create(), vec3.create(), vec3.create(), vec3.create()];
+        vec3.transformMat3(v1, rectVertices.subarray(0, 3), transform);
+        vec3.transformMat3(v2, rectVertices.subarray(3, 6), transform);
+        vec3.transformMat3(v3, rectVertices.subarray(6, 9), transform);
+        vec3.transformMat3(v4, rectVertices.subarray(9, 12), transform);
 
         const offset = this.count * VERTEX_SIZE * SPRITE_SIZE;
-        this.vertices.set(rectVertices, offset);
+        this.vertices.set(v1, offset);
+        this.vertices.set(v2, offset + 3);
+        this.vertices.set(v3, offset + 6);
+        this.vertices.set(v4, offset + 9);
+
+        console.log('this.vertices', this.vertices);
+        console.log(v1, v2, v3, v4)
+
         this.count++;
     }
 
