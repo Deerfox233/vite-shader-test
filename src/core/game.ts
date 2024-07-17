@@ -20,16 +20,16 @@ export default class Game {
         const { gl, shader } = this.webGLEssentials;
 
         const rect1 = new Float32Array([
-            -0.5, 0.5, 0.0,
-            0.5, 0.5, 0.0,
-            0.5, -0.5, 0.0,
-            -0.5, -0.5, 0.0,
+            -0.5, 0.5,
+            0.5, 0.5,
+            0.5, -0.5,
+            -0.5, -0.5,
         ]);
         const rect2 = new Float32Array([
-            0.6, 1.0, 0.0,
-            1.0, 1.0, 0.0,
-            1.0, 0.5, 0.0,
-            0.6, 0.5, 0.0
+            0.6, 1.0,
+            1.0, 1.0,
+            1.0, 0.5,
+            0.6, 0.5,
         ]);
 
         gl.useProgram(shader.program);
@@ -39,8 +39,12 @@ export default class Game {
 
         spriteBatch.begin();
 
-        spriteBatch.drawRect(rect1, mat3.translate(mat3.create(), mat3.create(), [-0.5, 0.0]));
-        spriteBatch.drawRect(rect2);
+        spriteBatch.drawRect({
+            rectVertices: rect1,
+            transform: mat3.translate(mat3.create(), mat3.create(), [0.5, 0.0]),
+            color: 0xff0000
+        });
+        spriteBatch.drawRect({ rectVertices: rect2 });
         spriteBatch.end();
     }
 
