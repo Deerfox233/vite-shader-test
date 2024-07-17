@@ -1,12 +1,12 @@
 import Shader, { ShaderData } from "./shader";
-import vertexSource from "./shaders/vs.glsl";
-import fragmentSource from "./shaders/fs.glsl";
+import simpleVs from "./shaders/simple-vs.glsl";
+import simpleFs from "./shaders/simple-fs.glsl";
 
 export type Context = WebGL2RenderingContext | WebGLRenderingContext;
 
 export interface WebGLEssentials {
     gl: Context;
-    shader: ShaderData;
+    simpleShader: ShaderData;
 }
 
 export function getWebGLContext(canvas: HTMLCanvasElement): Context {
@@ -29,12 +29,12 @@ export function getWebGLContext(canvas: HTMLCanvasElement): Context {
 }
 
 export function initWebGLResources(gl: Context): WebGLEssentials {
-    const rawShader = new Shader({ vertexSource, fragmentSource });
+    const rawSampleShader = new Shader({ vertexSource: simpleVs, fragmentSource: simpleFs });
 
-    const shader = rawShader.compile(gl);
+    const simpleShader = rawSampleShader.compile(gl);
 
     return {
         gl,
-        shader
+        simpleShader
     }
 }

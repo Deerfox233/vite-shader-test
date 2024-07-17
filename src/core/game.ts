@@ -17,7 +17,7 @@ export default class Game {
         if (!this.webGLEssentials) {
             throw new Error('WebGL essentials not found. Did you forget to call init()?');
         }
-        const { gl, shader } = this.webGLEssentials;
+        const { gl, simpleShader } = this.webGLEssentials;
 
         const rect1 = new Float32Array([
             -0.5, 0.5,
@@ -32,16 +32,18 @@ export default class Game {
             0.6, 0.5,
         ]);
 
-        gl.useProgram(shader.program);
-        gl.uniform4fv(shader.uniformLocations["uPixelColor"], [1.0, 0.0, 0.0, 1.0]);
+        gl.useProgram(simpleShader.program);
+        gl.uniform4fv(simpleShader.uniformLocations["uPixelColor"], [1.0, 0.0, 0.0, 1.0]);
 
         const spriteBatch = new SpriteBatch({ gl, capacity: 2 });
+
+        console.log(simpleShader.attributeLocations);
 
         spriteBatch.begin();
 
         spriteBatch.drawRect({
             rectVertices: rect1,
-            transform: mat3.translate(mat3.create(), mat3.create(), [0.5, 0.0]),
+            transform: mat3.translate(mat3.create(), mat3.create(), [-0.5, 0.0]),
             color: 0xff0000
         });
         spriteBatch.drawRect({ rectVertices: rect2 });

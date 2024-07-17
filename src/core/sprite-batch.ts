@@ -45,7 +45,15 @@ export class SpriteBatch {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.indices, gl.STATIC_DRAW);
 
-        this.vao = new VAO(indexBuffer, { index: 0, size: VERTEX_SIZE, type: gl.FLOAT, normalized: false, stride: 0, offset: 0 });
+        this.vao = new VAO(indexBuffer, [
+            {
+                size: VERTEX_SIZE,
+                type: gl.FLOAT,
+                normalized: false,
+                stride: 0,
+                offset: 0
+            },
+        ]);
     }
 
     public begin() {
