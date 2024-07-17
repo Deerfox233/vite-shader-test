@@ -2,7 +2,7 @@ import { mat3 } from "gl-matrix";
 import VAO from "./vao";
 import { Context } from "./webgl";
 
-const VERTEX_SIZE = 2; //x, y
+const VERTEX_SIZE = 3; //x, y
 const SPRITE_SIZE = 4;
 const INDEX_SIZE = 6;
 
@@ -45,14 +45,24 @@ export class SpriteBatch {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.indices, gl.STATIC_DRAW);
 
+        // 与特定着色器相关的代码，有待商榷
         this.vao = new VAO(indexBuffer, [
             {
-                size: VERTEX_SIZE,
+                name: "aVertexPosition",
+                size: 2,
                 type: gl.FLOAT,
                 normalized: false,
                 stride: 0,
                 offset: 0
             },
+            {
+                name: "aVertexColor",
+                size: 1,
+                type: gl.UNSIGNED_BYTE,
+                normalized: true,
+                stride: 0,
+                offset: 0
+            }
         ]);
     }
 
@@ -61,15 +71,11 @@ export class SpriteBatch {
     }
 
     public drawRect(params: { rectVertices: Float32Array, color?: number, transform?: mat3 }) {
-        const { rectVertices, color = 0xffffff, transform = mat3.create() } = params;
+        const { rectVertices, color = 0xffffffff, transform = mat3.create() } = params;
 
         if (this.count >= this.capacity) {
             throw new Error('SpriteBatch capacity reached'); // TODO
         }
-
-        console.log('transform', transform);
-
-        const offset = this.count * VERTEX_SIZE * SPRITE_SIZE;
 
         const [x0, y0] = [rectVertices[0], rectVertices[1]];
         const [x1, y1] = [rectVertices[2], rectVertices[3]];
@@ -78,21 +84,27 @@ export class SpriteBatch {
 
         const t = transform;
 
+        let offset = this.count * VERTEX_SIZE * SPRITE_SIZE;
+
         // ↖
-        this.vertices[offset] = x0 * t[0] + y0 * t[3] + t[6];
-        this.vertices[offset + 1] = x0 * t[1] + y0 * t[4] + t[7];
+        this.vertices[offset++] = x0 * t[0] + y0 * t[3] + t[6];
+        this.vertices[offset++] = x0 * t[1] + y0 * t[4] + t[7];
+        this.vertices[offset++] = color;
 
         // ↗
-        this.vertices[offset + 2] = x1 * t[0] + y1 * t[3] + t[6];
-        this.vertices[offset + 3] = x1 * t[1] + y1 * t[4] + t[7];
+        this.vertices[offset++] = x1 * t[0] + y1 * t[3] + t[6];
+        this.vertices[offset++] = x1 * t[1] + y1 * t[4] + t[7];
+        this.vertices[offset++] = color;
 
         // ↘
-        this.vertices[offset + 4] = x2 * t[0] + y2 * t[3] + t[6];
-        this.vertices[offset + 5] = x2 * t[1] + y2 * t[4] + t[7];
+        this.vertices[offset++] = x2 * t[0] + y2 * t[3] + t[6];
+        this.vertices[offset++] = x2 * t[1] + y2 * t[4] + t[7];
+        this.vertices[offset++] = color;
 
         // ↙
-        this.vertices[offset + 6] = x3 * t[0] + y3 * t[3] + t[6];
-        this.vertices[offset + 7] = x3 * t[1] + y3 * t[4] + t[7];
+        this.vertices[offset++] = x3 * t[0] + y3 * t[3] + t[6];
+        this.vertices[offset++] = x3 * t[1] + y3 * t[4] + t[7];
+        this.vertices[offset++] = color;
 
         this.count++;
     }
