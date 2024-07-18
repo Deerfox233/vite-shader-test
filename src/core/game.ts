@@ -8,12 +8,23 @@ const rect1 = new Float32Array([
     0.5, -0.5,
     -0.5, -0.5,
 ]);
+
 const rect2 = new Float32Array([
     0.6, 1.0,
     1.0, 1.0,
     1.0, 0.5,
     0.6, 0.5,
 ]);
+
+const rect3 = new Float32Array([
+    -0.25, 0.25,
+    0.25, 0.25,
+    0.25, -0.25,
+    -0.25, -0.25,
+]);
+
+console.log(rect3.buffer);
+
 export default class Game {
     private canvas?: HTMLCanvasElement;
     private webGLEssentials?: WebGLEssentials;
@@ -33,15 +44,20 @@ export default class Game {
 
         gl.useProgram(simpleShader.program);
 
-        const spriteBatch = new SpriteBatch({ gl, capacity: 2 });
+        const spriteBatch = new SpriteBatch({ gl, capacity: 3 });
 
         spriteBatch.begin();
         spriteBatch.drawRect({
             rectVertices: rect1,
             transform: mat3.translate(mat3.create(), mat3.create(), [-0.25, 0.0]),
-            color: 0xff0000ff
+            color: 0xc586c0ff
         });
-        spriteBatch.drawRect({ rectVertices: rect2 });
+        spriteBatch.drawRect({ rectVertices: rect2, color: 0x4ec9b0ff });
+        spriteBatch.drawRect({
+            rectVertices: rect3,
+            color: 0xdcdcaaff,
+            transform: mat3.translate(mat3.create(), mat3.create(), [0.25, 0.0]),
+        })
         spriteBatch.end();
     }
 

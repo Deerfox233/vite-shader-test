@@ -1,8 +1,9 @@
 import { mat3 } from "gl-matrix";
 import VAO from "./vao";
 import { Context } from "./webgl";
+import { colorToFloat } from "./color";
 
-const VERTEX_SIZE = 3; //x, y
+const VERTEX_SIZE = 3; //x, y, color（?）
 const SPRITE_SIZE = 4;
 const INDEX_SIZE = 6;
 
@@ -52,16 +53,16 @@ export class SpriteBatch {
                 size: 2,
                 type: gl.FLOAT,
                 normalized: false,
-                stride: 0,
+                stride: VERTEX_SIZE * Float32Array.BYTES_PER_ELEMENT,
                 offset: 0
             },
             {
                 name: "aVertexColor",
-                size: 1,
+                size: 4,
                 type: gl.UNSIGNED_BYTE,
                 normalized: true,
-                stride: 0,
-                offset: 0
+                stride: VERTEX_SIZE * Float32Array.BYTES_PER_ELEMENT,
+                offset: 2 * Float32Array.BYTES_PER_ELEMENT
             }
         ]);
     }
@@ -89,22 +90,22 @@ export class SpriteBatch {
         // ↖
         this.vertices[offset++] = x0 * t[0] + y0 * t[3] + t[6];
         this.vertices[offset++] = x0 * t[1] + y0 * t[4] + t[7];
-        this.vertices[offset++] = color;
+        this.vertices[offset++] = colorToFloat(color);
 
         // ↗
         this.vertices[offset++] = x1 * t[0] + y1 * t[3] + t[6];
         this.vertices[offset++] = x1 * t[1] + y1 * t[4] + t[7];
-        this.vertices[offset++] = color;
+        this.vertices[offset++] = colorToFloat(color);
 
         // ↘
         this.vertices[offset++] = x2 * t[0] + y2 * t[3] + t[6];
         this.vertices[offset++] = x2 * t[1] + y2 * t[4] + t[7];
-        this.vertices[offset++] = color;
+        this.vertices[offset++] = colorToFloat(color);
 
         // ↙
         this.vertices[offset++] = x3 * t[0] + y3 * t[3] + t[6];
         this.vertices[offset++] = x3 * t[1] + y3 * t[4] + t[7];
-        this.vertices[offset++] = color;
+        this.vertices[offset++] = colorToFloat(color);
 
         this.count++;
     }
