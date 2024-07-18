@@ -50,7 +50,7 @@ export class SpriteBatch {
         this.vao = new VAO(indexBuffer, [
             {
                 name: "aVertexPosition",
-                size: 2,
+                size: 2, // x, y
                 type: gl.FLOAT,
                 normalized: false,
                 stride: VERTEX_SIZE * Float32Array.BYTES_PER_ELEMENT,
@@ -58,7 +58,7 @@ export class SpriteBatch {
             },
             {
                 name: "aVertexColor",
-                size: 4,
+                size: 4, // r, g, b, a
                 type: gl.UNSIGNED_BYTE,
                 normalized: true,
                 stride: VERTEX_SIZE * Float32Array.BYTES_PER_ELEMENT,
