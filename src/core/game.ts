@@ -28,7 +28,7 @@ export default class Game {
     private webGLEssentials?: WebGLEssentials;
 
     public init() {
-        this.initCanvas();
+        this.initCanvas({ width: 1280, ratio: 16 / 9 });
         this.initWebGLEssentials();
 
         return this;
@@ -40,11 +40,22 @@ export default class Game {
         }
         const { gl, simpleShader } = this.webGLEssentials;
 
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
         gl.useProgram(simpleShader.program);
 
-        gl.uniformMatrix4fv(simpleShader.uniformLocations["uModelViewMatrix"], false, mat4.create());
+        const fieldOfView = (45 * Math.PI) / 180;
+        const aspect = gl.canvas.width / gl.canvas.height;
+        const zNear = 0.1;
+        const zFar = 100.0;
+        const projectionMatrix = mat4.create();
+        mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+
+        const modelViewMatrix = mat4.create();
+        mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
+
+        gl.uniformMatrix4fv(simpleShader.uniformLocations["uModelViewMatrix"], false, modelViewMatrix);
+        gl.uniformMatrix4fv(simpleShader.uniformLocations["uProjectionMatrix"], false, projectionMatrix);
+
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
         const spriteBatch = new SpriteBatch({ gl, capacity: 3 });
 
@@ -62,15 +73,37 @@ export default class Game {
         spriteBatch.drawRect({
             rectVertices: rect3,
             color: 0xdcdcaaff,
-            transform: mat3.translate(mat3.create(), mat3.create(), [0.25, 0.0]),
-        })
+            transform: mat3.rotate(mat3.create(), mat3.create(), Math.PI / 4),
+        });
         spriteBatch.end();
     }
 
-    private initCanvas() {
+    private initCanvas(params: { width?: number, height?: number, ratio?: number }) {
+        const { width, height, ratio } = params;
+
         this.canvas = document.getElementById('canvas') as HTMLCanvasElement;
-        this.canvas.width = 1280;
-        this.canvas.height = 720;
+        if (!this.canvas) {
+            throw new Error('Canvas not found');
+        }
+
+        if (width != null && height != null) {
+            this.canvas.width = width;
+            this.canvas.height = height;
+        } else if (width == null && height != null) {
+            if (ratio != null) {
+                this.canvas.width = height * ratio;
+                this.canvas.height = height;
+            } else {
+                throw new Error('Ratio not found');
+            }
+        } else if (width != null && height == null) {
+            if (ratio != null) {
+                this.canvas.width = width;
+                this.canvas.height = width / ratio;
+            } else {
+                throw new Error('Ratio not found');
+            }
+        }
     }
 
     private initWebGLEssentials() {
