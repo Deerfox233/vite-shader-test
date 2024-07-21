@@ -34,6 +34,10 @@ export default class Game {
         return this;
     }
 
+    public update() {
+        // TODO
+    }
+
     public draw() {
         if (!this.webGLEssentials) {
             throw new Error('WebGL essentials not found. Did you forget to call init()?');
