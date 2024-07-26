@@ -34,7 +34,7 @@ export default class Game {
         return this;
     }
 
-    public update() {
+    public update(delta: number) {
         // TODO
     }
 
