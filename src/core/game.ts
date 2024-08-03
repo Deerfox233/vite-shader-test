@@ -27,6 +27,12 @@ export default class Game {
     private canvas?: HTMLCanvasElement;
     private webGLEssentials?: WebGLEssentials;
 
+    private rectTransforms = [
+        { translation: [-0.25, 0.0], rotation: 0 },
+        { translation: [0.8, 0.8], rotation: 0 },
+        { translation: [0.0, 0.0], rotation: Math.PI / 4 },
+    ];
+
     public init() {
         this.initCanvas({ width: 1280, ratio: 16 / 9 });
         this.initWebGLEssentials();
@@ -35,7 +41,8 @@ export default class Game {
     }
 
     public update(delta: number) {
-        // TODO
+        this.rectTransforms[0].translation[0] += delta * 0.001;
+        this.rectTransforms[2].rotation += delta * 0.001;
     }
 
     public draw() {
@@ -43,6 +50,9 @@ export default class Game {
             throw new Error('WebGL essentials not found. Did you forget to call init()?');
         }
         const { gl, simpleShader } = this.webGLEssentials;
+
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
 
         gl.useProgram(simpleShader.program);
 
@@ -66,18 +76,18 @@ export default class Game {
         spriteBatch.begin();
         spriteBatch.drawRect({
             rectVertices: rect1,
-            transform: mat3.translate(mat3.create(), mat3.create(), [-0.25, 0.0]),
+            transform: mat3.translate(mat3.create(), mat3.create(), new Float32Array(this.rectTransforms[0].translation)),
             color: 0xc586c0ff
         });
         spriteBatch.drawRect({
             rectVertices: rect2,
             color: 0x4ec9b0ff,
-            transform: mat3.translate(mat3.create(), mat3.create(), [0.8, 0.8]),
+            transform: mat3.translate(mat3.create(), mat3.create(), new Float32Array(this.rectTransforms[1].translation)),
         });
         spriteBatch.drawRect({
             rectVertices: rect3,
             color: 0xdcdcaaff,
-            transform: mat3.rotate(mat3.create(), mat3.create(), Math.PI / 4),
+            transform: mat3.rotate(mat3.create(), mat3.create(), this.rectTransforms[2].rotation),
         });
         spriteBatch.end();
     }

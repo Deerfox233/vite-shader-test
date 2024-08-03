@@ -7,7 +7,7 @@ export function startGameLoop(game: Game) {
     let last = performance.now();
     let delta = 0;
 
-    function loopOnce() {
+    function loop() {
         const now = performance.now();
         const elapsed = now - last;
         last = now;
@@ -20,9 +20,9 @@ export function startGameLoop(game: Game) {
 
         game.draw();
 
-        requestAnimationFrame(loopOnce);
+        requestAnimationFrame(loop);
     }
 
-    requestAnimationFrame(loopOnce);
+    requestAnimationFrame(loop);
 }
 
