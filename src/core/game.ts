@@ -41,8 +41,8 @@ export default class Game {
     }
 
     public update(delta: number) {
-        this.rectTransforms[0].translation[0] += delta * 0.001;
-        this.rectTransforms[2].rotation += delta * 0.001;
+        this.rectTransforms[0].translation[0] += delta * 1;
+        this.rectTransforms[2].rotation += delta * 1;
     }
 
     public draw() {
