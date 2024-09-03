@@ -1,7 +1,7 @@
 import Game from "./game";
 
 export function startGameLoop(game: Game) {
-    const TPS = 25;
+    const TPS = 60;
     const TPS_INTERVAL = 1000 / TPS;
 
     let last = performance.now();
@@ -28,7 +28,7 @@ export function startGameLoop(game: Game) {
             fps = frames;
             frames = 0;
             lastFpsUpdate = now;
-            console.log(`FPS: ${fps}`);
+            // console.log(`FPS: ${fps}`);
         }
 
         requestAnimationFrame(loop);
