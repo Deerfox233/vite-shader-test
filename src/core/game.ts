@@ -10,19 +10,19 @@ const rect1 = new Float32Array([
     -0.5, -0.5,
 ]);
 
-const rect2 = new Float32Array([
-    -0.2, 0.2,
-    0.2, 0.2,
-    0.2, -0.3,
-    -0.2, -0.3,
-]);
+// const rect2 = new Float32Array([
+//     -0.2, 0.2,
+//     0.2, 0.2,
+//     0.2, -0.3,
+//     -0.2, -0.3,
+// ]);
 
-const rect3 = new Float32Array([
-    -0.25, 0.25,
-    0.25, 0.25,
-    0.25, -0.25,
-    -0.25, -0.25,
-]);
+// const rect3 = new Float32Array([
+//     -0.25, 0.25,
+//     0.25, 0.25,
+//     0.25, -0.25,
+//     -0.25, -0.25,
+// ]);
 
 export default class Game {
     private canvas?: HTMLCanvasElement;
@@ -30,9 +30,9 @@ export default class Game {
     private input?: Input;
 
     private rectTransforms = [
-        { translation: [-0.25, 0.0], rotation: 0 },
-        { translation: [0.8, 0.8], rotation: 0 },
-        { translation: [0.0, 0.0], rotation: Math.PI / 4 },
+        { translation: [0.0, 0.0], rotation: 0 },
+        // { translation: [0.8, 0.8], rotation: 0 },
+        // { translation: [0.0, 0.0], rotation: Math.PI / 4 },
     ];
 
     public init() {
@@ -47,8 +47,8 @@ export default class Game {
     }
 
     public update(delta: number) {
-        this.rectTransforms[0].translation[0] += delta * 1;
-        this.rectTransforms[2].rotation += delta * 1;
+        // this.rectTransforms[0].translation[0] += delta * 1;
+        // this.rectTransforms[2].rotation += delta * 1;
     }
 
     public draw() {
@@ -85,16 +85,16 @@ export default class Game {
             transform: mat3.translate(mat3.create(), mat3.create(), new Float32Array(this.rectTransforms[0].translation)),
             color: 0xc586c0ff
         });
-        spriteBatch.drawRect({
-            rectVertices: rect2,
-            color: 0x4ec9b0ff,
-            transform: mat3.translate(mat3.create(), mat3.create(), new Float32Array(this.rectTransforms[1].translation)),
-        });
-        spriteBatch.drawRect({
-            rectVertices: rect3,
-            color: 0xdcdcaaff,
-            transform: mat3.rotate(mat3.create(), mat3.create(), this.rectTransforms[2].rotation),
-        });
+        // spriteBatch.drawRect({
+        //     rectVertices: rect2,
+        //     color: 0x4ec9b0ff,
+        //     transform: mat3.translate(mat3.create(), mat3.create(), new Float32Array(this.rectTransforms[1].translation)),
+        // });
+        // spriteBatch.drawRect({
+        //     rectVertices: rect3,
+        //     color: 0xdcdcaaff,
+        //     transform: mat3.rotate(mat3.create(), mat3.create(), this.rectTransforms[2].rotation),
+        // });
         spriteBatch.end();
     }
 

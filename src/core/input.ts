@@ -1,11 +1,11 @@
-export const enum Key {
+export enum Key {
     LEFT = 37,
     UP = 38,
     RIGHT = 39,
     DOWN = 40,
 }
 
-const enum State {
+enum State {
     PRESSED = 1,
     RELEASED = 0,
 }
@@ -43,6 +43,10 @@ export class Input {
     }
 
     private handleKeyDown(e: KeyboardEvent) {
+        if (!Object.values(Key).includes(e.keyCode)) {
+            return;
+        }
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -60,6 +64,10 @@ export class Input {
     }
 
     private handleKeyUp(e: KeyboardEvent) {
+        if (!Object.values(Key).includes(e.keyCode)) {
+            return;
+        }
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -78,28 +86,12 @@ export class Input {
 }
 
 export function registerDirectionKeys(input: Input) {
-    input.onPressed(Key.UP, () => {
-        console.log("UP pressed");
-    });
-    input.onReleased(Key.UP, () => {
-        console.log("UP released");
-    });
-    input.onPressed(Key.DOWN, () => {
-        console.log("DOWN pressed");
-    });
-    input.onReleased(Key.DOWN, () => {
-        console.log("DOWN released");
-    });
-    input.onPressed(Key.LEFT, () => {
-        console.log("LEFT pressed");
-    });
-    input.onReleased(Key.LEFT, () => {
-        console.log("LEFT released");
-    });
-    input.onPressed(Key.RIGHT, () => {
-        console.log("RIGHT pressed");
-    });
-    input.onReleased(Key.RIGHT, () => {
-        console.log("RIGHT released");
+    [Key.UP, Key.DOWN, Key.LEFT, Key.RIGHT].forEach(key => {
+        input.onPressed(key, () => {
+            console.log(`${key} pressed`);
+        });
+        input.onReleased(key, () => {
+            console.log(`${key} released`);
+        });
     });
 }
