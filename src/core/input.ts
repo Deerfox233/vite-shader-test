@@ -1,11 +1,11 @@
-export const enum Key {
+export enum Key {
     LEFT = 37,
     UP = 38,
     RIGHT = 39,
     DOWN = 40,
 }
 
-const enum State {
+enum State {
     PRESSED = 1,
     RELEASED = 0,
 }
@@ -44,6 +44,10 @@ export class KeyboardInput {
     }
 
     private handleKeyDown(e: KeyboardEvent) {
+        if (!Object.values(Key).includes(e.keyCode)) {
+            return;
+        }
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -61,6 +65,10 @@ export class KeyboardInput {
     }
 
     private handleKeyUp(e: KeyboardEvent) {
+        if (!Object.values(Key).includes(e.keyCode)) {
+            return;
+        }
+
         e.preventDefault();
         e.stopPropagation();
 
