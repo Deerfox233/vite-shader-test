@@ -12,7 +12,8 @@ const enum State {
 
 type Handler = (state: State) => void;
 
-export class Input {
+export class KeyboardInput {
+    private stack: number[] = [];
     private keyState: State[] = [];
     private handlers: Map<Key, Handler[]> = new Map();
 
@@ -77,29 +78,13 @@ export class Input {
     }
 }
 
-export function registerDirectionKeys(input: Input) {
-    input.onPressed(Key.UP, () => {
-        console.log("UP pressed");
-    });
-    input.onReleased(Key.UP, () => {
-        console.log("UP released");
-    });
-    input.onPressed(Key.DOWN, () => {
-        console.log("DOWN pressed");
-    });
-    input.onReleased(Key.DOWN, () => {
-        console.log("DOWN released");
-    });
-    input.onPressed(Key.LEFT, () => {
-        console.log("LEFT pressed");
-    });
-    input.onReleased(Key.LEFT, () => {
-        console.log("LEFT released");
-    });
-    input.onPressed(Key.RIGHT, () => {
-        console.log("RIGHT pressed");
-    });
-    input.onReleased(Key.RIGHT, () => {
-        console.log("RIGHT released");
+export function registerDirectionKeys(input: KeyboardInput) {
+    [Key.UP, Key.DOWN, Key.LEFT, Key.RIGHT].forEach(key => {
+        input.onPressed(key, () => {
+            console.log(`${key} pressed`);
+        });
+        input.onReleased(key, () => {
+            console.log(`${key} released`);
+        });
     });
 }

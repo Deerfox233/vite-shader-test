@@ -1,7 +1,7 @@
 import { mat3, mat4 } from "gl-matrix";
 import { WebGLEssentials, getWebGLContext, initWebGLResources } from "./webgl";
 import { SpriteBatch } from "./sprite-batch";
-import { Input, Key, registerDirectionKeys } from "./input";
+import { KeyboardInput, registerDirectionKeys } from "./input";
 
 const rect1 = new Float32Array([
     -0.5, 0.5,
@@ -27,7 +27,7 @@ const rect3 = new Float32Array([
 export default class Game {
     private canvas?: HTMLCanvasElement;
     private webGLEssentials?: WebGLEssentials;
-    private input?: Input;
+    private keyboardInput?: KeyboardInput;
 
     private rectTransforms = [
         { translation: [-0.25, 0.0], rotation: 0 },
@@ -39,9 +39,9 @@ export default class Game {
         this.initCanvas({ width: 1280, ratio: 16 / 9 });
         this.initWebGLEssentials();
 
-        this.input = new Input();
-        this.input.init();
-        registerDirectionKeys(this.input);
+        this.keyboardInput = new KeyboardInput();
+        this.keyboardInput.init();
+        registerDirectionKeys(this.keyboardInput);
 
         return this;
     }
