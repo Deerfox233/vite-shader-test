@@ -1,39 +1,15 @@
-import { mat3, mat4 } from "gl-matrix";
+import { mat4 } from "gl-matrix";
 import { WebGLEssentials, getWebGLContext, initWebGLResources } from "./webgl";
 import { SpriteBatch } from "./sprite-batch";
-import { KeyboardInput, registerDirectionKeys } from "./input";
-
-const rect1 = new Float32Array([
-    -0.5, 0.5,
-    0.5, 0.5,
-    0.5, -0.5,
-    -0.5, -0.5,
-]);
-
-// const rect2 = new Float32Array([
-//     -0.2, 0.2,
-//     0.2, 0.2,
-//     0.2, -0.3,
-//     -0.2, -0.3,
-// ]);
-
-// const rect3 = new Float32Array([
-//     -0.25, 0.25,
-//     0.25, 0.25,
-//     0.25, -0.25,
-//     -0.25, -0.25,
-// ]);
+import { Key, KeyboardInput, registerDirectionKeys } from "./input";
+import { Entity } from "./entity";
 
 export default class Game {
     private canvas?: HTMLCanvasElement;
     private webGLEssentials?: WebGLEssentials;
     private keyboardInput?: KeyboardInput;
 
-    private rectTransforms = [
-        { translation: [0.0, 0.0], rotation: 0 },
-        // { translation: [0.8, 0.8], rotation: 0 },
-        // { translation: [0.0, 0.0], rotation: Math.PI / 4 },
-    ];
+    private entities: Entity[] = [];
 
     public init() {
         this.initCanvas({ width: 1280, ratio: 16 / 9 });
@@ -43,12 +19,14 @@ export default class Game {
         this.keyboardInput.init();
         registerDirectionKeys(this.keyboardInput);
 
+        // this.keyboardInput.onPressed(Key.RIGHT, () => {
+
+        // });
+
         return this;
     }
 
     public update(delta: number) {
-        // this.rectTransforms[0].translation[0] += delta * 1;
-        // this.rectTransforms[2].rotation += delta * 1;
     }
 
     public draw() {
@@ -81,20 +59,19 @@ export default class Game {
 
         spriteBatch.begin();
         spriteBatch.drawRect({
-            rectVertices: rect1,
-            transform: mat3.translate(mat3.create(), mat3.create(), new Float32Array(this.rectTransforms[0].translation)),
-            color: 0xc586c0ff
+            color: 0xc586c0ff,
+            w: 1,
+            h: 0.3,
+            x: 0,
+            y: 0,
         });
-        // spriteBatch.drawRect({
-        //     rectVertices: rect2,
-        //     color: 0x4ec9b0ff,
-        //     transform: mat3.translate(mat3.create(), mat3.create(), new Float32Array(this.rectTransforms[1].translation)),
-        // });
-        // spriteBatch.drawRect({
-        //     rectVertices: rect3,
-        //     color: 0xdcdcaaff,
-        //     transform: mat3.rotate(mat3.create(), mat3.create(), this.rectTransforms[2].rotation),
-        // });
+        spriteBatch.drawRect({
+            color: 0x4ec9b0ff,
+            w: 0.4,
+            h: 0.5,
+            x: 0.8,
+            y: 0.6,
+        });
         spriteBatch.end();
     }
 
